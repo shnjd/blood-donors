@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, Button, TextInput } from 'react-native'
 import { supabase } from '../lib/supabase'
+import { VStack } from './ui/vstack'
+import { Input, InputField } from './ui/input'
+import { Button, ButtonText } from './ui/button'
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -14,7 +16,7 @@ export default function Auth() {
       password: password,
     })
 
-    if (error) Alert.alert(error.message)
+    if (error) console.log(error.message)
     setLoading(false)
   }
 
@@ -28,51 +30,40 @@ export default function Auth() {
       password: password,
     })
 
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
+    if (error) console.log(error.message)
+    if (!session) console.log('Please check your inbox for email verification!')
     setLoading(false)
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Password"
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
-      </View>
-    </View>
+    <VStack className='gap-4 justify-center p-5 h-full'>
+      <VStack>
+        <Input>
+          <InputField
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+            placeholder="email@address.com"
+            autoCapitalize={'none'}
+          />
+        </Input>
+      </VStack>
+      <VStack>
+        <Input>
+          <InputField
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
+            placeholder="Password"
+            autoCapitalize={'none'}
+          />
+        </Input>
+      </VStack>
+      <VStack>
+        <Button variant='solid' disabled={loading} onPress={() => signInWithEmail()}>
+          <ButtonText>Sign In</ButtonText>
+        </Button>
+      </VStack>
+    </VStack>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-})
