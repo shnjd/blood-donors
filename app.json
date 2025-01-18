@@ -2,6 +2,7 @@
   "expo": {
     "name": "blood-donors",
     "slug": "blood-donors",
+    "scheme": "com.blooddonors",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +17,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.blooddonors"
+      "package": "com.blooddonors.app"
     },
     "web": {
       "bundler": "metro",

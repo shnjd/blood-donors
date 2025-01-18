@@ -4,7 +4,7 @@ import { VStack } from './ui/vstack'
 import { Input, InputField } from './ui/input'
 import { Button, ButtonText } from './ui/button'
 
-export default function Auth() {
+export default function AuthForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -36,33 +36,27 @@ export default function Auth() {
   }
 
   return (
-    <VStack className='gap-4 justify-center p-5 h-full'>
-      <VStack>
-        <Input>
-          <InputField
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-            placeholder="email@address.com"
-            autoCapitalize={'none'}
-          />
-        </Input>
-      </VStack>
-      <VStack>
-        <Input>
-          <InputField
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-            placeholder="Password"
-            autoCapitalize={'none'}
-          />
-        </Input>
-      </VStack>
-      <VStack>
-        <Button variant='solid' disabled={loading} onPress={() => signInWithEmail()}>
-          <ButtonText>Sign In</ButtonText>
-        </Button>
-      </VStack>
+    <VStack >
+      <Input>
+        <InputField
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+          placeholder="email@address.com"
+          autoCapitalize={'none'}
+        />
+      </Input>
+      <Input>
+        <InputField
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          secureTextEntry={true}
+          placeholder="Password"
+          autoCapitalize={'none'}
+        />
+      </Input>
+      <Button variant='solid' disabled={loading} onPress={() => signInWithEmail()}>
+        <ButtonText>Sign In</ButtonText>
+      </Button>
     </VStack>
   )
 }

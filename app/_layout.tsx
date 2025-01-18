@@ -1,8 +1,26 @@
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Toaster } from 'sonner-native';
 
 export default function RootLayout() {
-  return <GluestackUIProvider mode="light"><Slot /></GluestackUIProvider>;
+  return (
+    <GestureHandlerRootView>
+      <GluestackUIProvider mode="light">
+        <Stack>
+          <Stack.Screen name="index" />
+          <Stack.Screen
+            name="auth/index"
+            options={{
+              title: 'Login',
+              headerShown: false,
+            }}
+          />
+        </Stack>
+        <Toaster />
+      </GluestackUIProvider>
+    </GestureHandlerRootView>
+  );
 }
