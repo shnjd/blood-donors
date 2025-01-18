@@ -1,4 +1,4 @@
-interface ILoginRequest {
+interface ISigninRequest {
   email: string,
   password: string
 }

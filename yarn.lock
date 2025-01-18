@@ -1927,6 +1927,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/netinfo@11.4.1":
+  version "11.4.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-11.4.1.tgz#a3c247aceab35f75dd0aa4bfa85d2be5a4508688"
+  integrity sha512-B0BYAkghz3Q2V09BF88RA601XursIEA111tnc2JOaN7axJWmNefmfjZqw/KdSxKZp7CZUuPpjBmz/WCR9uaHYg==
+
 "@react-native/assets-registry@0.76.6":
   version "0.76.6"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.76.6.tgz#649af8a19cbabcea321dbcfb1a1ae04bb298d958"
@@ -2376,10 +2381,31 @@
   dependencies:
     tslib "^2.8.0"
 
+"@tanstack/query-async-storage-persister@^5.64.1":
+  version "5.64.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-async-storage-persister/-/query-async-storage-persister-5.64.1.tgz#524dc0ab69bf8e722dc2b03db9a97a546f1e025d"
+  integrity sha512-uXjTgy8gGtZE3Ofi+ExfhyaigSrprBMNBJXuiHOp4o0q44jZSbiQwEYuUrZmUIoVApVVegBxCpt2b8OmxAJNrg==
+  dependencies:
+    "@tanstack/query-persist-client-core" "5.64.1"
+
 "@tanstack/query-core@5.64.1":
   version "5.64.1"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.64.1.tgz#d56e26b3e29fc68a89d140f1fd92900bc8f3fc86"
   integrity sha512-978Wx4Wl4UJZbmvU/rkaM9cQtXXrbhK0lsz/UZhYIbyKYA8E4LdomTwyh2GHZ4oU0BKKoDH4YlKk2VscCUgNmg==
+
+"@tanstack/query-persist-client-core@5.64.1":
+  version "5.64.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.64.1.tgz#7c8e7f8a7209308b976ed0a9e24dbb51838e681e"
+  integrity sha512-5SGe5IHKXJmkxL2gwKjHQrap18hY57kF0DVUd2yh6QLFn5pruUG4QO6DsjEuQGk33ZfxkX4Z7uJdZBgfMedA8g==
+  dependencies:
+    "@tanstack/query-core" "5.64.1"
+
+"@tanstack/react-query-persist-client@^5.64.1":
+  version "5.64.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.64.1.tgz#cb377d9819ff5589a718a839403b249c133dce5e"
+  integrity sha512-2GmjTFU/QGF3p56UwnFW+N+WsKnzuNry3RQsyDtJ6/AQvy5nd567Mf58hc4bAj35nvI8MkuKCrzegRmHC8Wjxw==
+  dependencies:
+    "@tanstack/query-persist-client-core" "5.64.1"
 
 "@tanstack/react-query@^5.64.1":
   version "5.64.1"

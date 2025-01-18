@@ -19,7 +19,7 @@ const AuthScreen = () => {
           Welcome Back!
         </Heading>
         <Text size='lg' className='text-primary-200 max-w-[320px]'>
-          Log in to your account using your email address and password.
+          Sign in to your account using your email address and password.
         </Text>
       </VStack>
       <AuthForm />

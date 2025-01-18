@@ -1,21 +1,21 @@
 import { VStack } from "../ui/vstack"
-import { Button, ButtonText } from "../ui/button"
+import { Button, ButtonSpinner, ButtonText } from "../ui/button"
 import FormInput from "../form-ui/input"
 import { FormControl } from "../ui/form-control"
 import * as z from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLogin, useUser } from "@/lib/queries/auth"
+import { useSignin, useUser } from "@/lib/queries/auth"
 import { useEffect } from "react"
 import { toast } from "sonner-native"
-import { useRouter } from "expo-router"
+import { Redirect, useRouter } from "expo-router"
 
-const loginSchema = z.object({
+const signinSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(1, "Password is required")
 })
 
-type LoginSchema = z.infer<typeof loginSchema>
+type SigninSchema = z.infer<typeof signinSchema>
 
 export default function AuthForm() {
   const {
@@ -23,33 +23,35 @@ export default function AuthForm() {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema)
+  } = useForm<SigninSchema>({
+    resolver: zodResolver(signinSchema)
   })
-  const login = useLogin()
+  const signin = useSignin()
   const { data: user } = useUser()
   const router = useRouter()
 
   useEffect(() => {
     if (user) {
-      toast.warning('Already logged in', {
-        description: "You're already logged in. sign out to log in as a different user."
+      toast.warning('Already signed in', {
+        description: "You're already signed in. sign out first to sign in as a different user."
       })
       router.push('/app/account')
     }
   }, [])
 
-  const onSubmit = (values: LoginSchema) => {
-    login.mutate(values)
+  const onSubmit = (values: SigninSchema) => {
+    signin.mutate(values)
     reset()
   }
+
+  if (user) return <Redirect href='/app' />
 
   return (
     <VStack className="py-5 gap-4 px-7">
       <FormControl
         className="gap-4"
         size="md"
-        isDisabled={login.isPending}
+        isDisabled={signin.isPending}
         isReadOnly={false}
         isRequired={false}
       >
@@ -73,6 +75,7 @@ export default function AuthForm() {
       </FormControl>
       <Button variant='solid' onPress={handleSubmit(onSubmit)}>
         <ButtonText>Sign In</ButtonText>
+        {signin.isPending && <ButtonSpinner color='#ffffff' size={16} />}
       </Button>
     </VStack>
   )

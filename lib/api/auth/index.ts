@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 
-export const signIn = async ({ email, password }: ILoginRequest) => {
+export const signIn = async ({ email, password }: ISigninRequest) => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return Promise.reject(error)
