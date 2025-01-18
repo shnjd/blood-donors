@@ -15,7 +15,9 @@ interface Props<T extends FieldValues> {
   isPassword?: boolean,
   helperText?: string,
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters',
-  secureTextEntry?: boolean
+  secureTextEntry?: boolean,
+  keyboardType?: 'numeric' | 'email-address',
+  numberOfLines?: number
 }
 
 const FormInput = <T extends FieldValues>({
@@ -28,7 +30,9 @@ const FormInput = <T extends FieldValues>({
   helperText,
   errors,
   autoCapitalize = 'sentences',
-  secureTextEntry = false
+  secureTextEntry = false,
+  keyboardType,
+  numberOfLines
 }: Props<T>) => {
   return (
     <VStack>
@@ -45,7 +49,6 @@ const FormInput = <T extends FieldValues>({
         }}
         render={({ field: { onChange, value } }) => (
           <Input
-            className="my-1"
             size={inputSize}
             isInvalid={!!errors?.[name]}
           >
@@ -56,6 +59,9 @@ const FormInput = <T extends FieldValues>({
               onChangeText={onChange}
               autoCapitalize={autoCapitalize}
               secureTextEntry={secureTextEntry}
+              keyboardType={keyboardType}
+              numberOfLines={numberOfLines}
+              multiline={!!numberOfLines && numberOfLines > 1}
             />
           </Input>
         )}

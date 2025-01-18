@@ -11,8 +11,8 @@ import { toast } from "sonner-native"
 import { Redirect, useRouter } from "expo-router"
 
 const signinSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, "Password is required")
+  email: z.string({ message: "Email address is required" }).email('Invalid email address'),
+  password: z.string({ message: "Password is required" }).min(1, "Password is required")
 })
 
 type SigninSchema = z.infer<typeof signinSchema>
@@ -22,7 +22,7 @@ export default function AuthForm() {
     control,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors, isSubmitted, isValid }
   } = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema)
   })
@@ -51,6 +51,7 @@ export default function AuthForm() {
       <FormControl
         className="gap-4"
         size="md"
+        isInvalid={isSubmitted && !isValid}
         isDisabled={signin.isPending}
         isReadOnly={false}
         isRequired={false}
@@ -62,15 +63,16 @@ export default function AuthForm() {
           label="Email"
           placeholder="email@example.com"
           autoCapitalize={'none'}
+          keyboardType="email-address"
         />
         <FormInput
           control={control}
           name="password"
           errors={errors}
           label="Password"
-          secureTextEntry={true}
+          secureTextEntry
           placeholder="********"
-          autoCapitalize={'none'}
+          autoCapitalize='none'
         />
       </FormControl>
       <Button variant='solid' onPress={handleSubmit(onSubmit)}>
