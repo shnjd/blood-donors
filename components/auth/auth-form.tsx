@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { VStack } from "../ui/vstack"
 import { Button, ButtonText } from "../ui/button"
 import FormInput from "../form-ui/input"
@@ -6,9 +5,10 @@ import { FormControl } from "../ui/form-control"
 import * as z from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useLogin, useUser } from "@/lib/queries/auth"
+import { useEffect } from "react"
 import { toast } from "sonner-native"
-import authApi from "@/lib/api/auth"
-import { AuthError } from "@supabase/supabase-js"
+import { useRouter } from "expo-router"
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -21,41 +21,35 @@ export default function AuthForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitted }
+    reset,
+    formState: { errors }
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema)
   })
-  const [loading, setLoading] = useState(false)
+  const login = useLogin()
+  const { data: user } = useUser()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      toast.warning('Already logged in', {
+        description: "You're already logged in. sign out to log in as a different user."
+      })
+      router.push('/app/account')
+    }
+  }, [])
 
   const onSubmit = (values: LoginSchema) => {
-
-    authApi.signIn(values).then((data) => {
-      console.log(data)
-    }).catch((error: AuthError) => {
-      console.log(error.code)
-      if (error.code === 'invalid_credentials') {
-        toast.error('Failed to login', {
-          description: 'Invalid email or password! try again'
-        })
-      } else toast.error('Failed to login')
-    })
-
-    // if(error) {
-    //   if(
-    //     Array.isArray(error) && 
-    //     error.length > 0 && 
-    //       error.some(v => String(v).toLowerCase().includes('invalid'))
-    //   )
-    // }
+    login.mutate(values)
+    reset()
   }
 
   return (
     <VStack className="py-5 gap-4 px-7">
       <FormControl
-        isInvalid={isSubmitted && !isValid}
         className="gap-4"
         size="md"
-        isDisabled={false}
+        isDisabled={login.isPending}
         isReadOnly={false}
         isRequired={false}
       >
@@ -77,7 +71,7 @@ export default function AuthForm() {
           autoCapitalize={'none'}
         />
       </FormControl>
-      <Button variant='solid' disabled={loading} onPress={handleSubmit(onSubmit)}>
+      <Button variant='solid' onPress={handleSubmit(onSubmit)}>
         <ButtonText>Sign In</ButtonText>
       </Button>
     </VStack>
