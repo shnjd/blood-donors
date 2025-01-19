@@ -1,23 +1,46 @@
 import { VStack } from '@/components/ui/vstack'
 import { useDonors } from '@/lib/queries/donors'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import DonorCard from '@/components/donors/donor-card'
-import { FilterX, UserRoundPlus } from 'lucide-react-native'
+import { FilterX, LandPlot } from 'lucide-react-native'
 import { Pressable } from '@/components/ui/pressable'
-import DonorFormWrapper from '@/components/donors/form-wrapper'
-import { Text } from '@/components/ui/text'
 import { queryClient } from '@/lib/react-query'
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { StatusBar } from 'react-native'
-import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import { Filter } from 'lucide-react-native'
+import { useLocalSearchParams } from 'expo-router'
+import { useAreas } from '@/lib/queries/area'
+import { BloodGroup } from '@/lib/constants/enums'
+import { Database } from '@/lib/database.types'
+import { Text } from '@/components/ui/text'
+import DonorFilters from '@/components/donors/donor-filters'
 
 const DonorsScreen = () => {
-  const { data: donors, isFetching } = useDonors()
-  const [add, setAdd] = useState(false)
-  const [showFilters, setFilters] = useState(false)
+  const [showFilters, setFilters] = useState(true)
   const offsetY = useSharedValue(0);
+  const { bg: bloodGroupKey, area: areaId } = useLocalSearchParams()
+  const { data: areas } = useAreas()
+  const { data: donors, isFetching } = useDonors({ bloodGroup: bloodGroupKey, areaId })
+
+  const {
+    bloodGroup,
+    area
+  } = useMemo(() => {
+    const res: {
+      bloodGroup: string | null,
+      area: Database['public']['Tables']['AreaCommittee']['Row'] | null
+    } = {
+      bloodGroup: null,
+      area: null
+    }
+    if (areaId && !isNaN(Number(areaId)) && areas)
+      res.area = areas.find(a => a.id === Number(areaId)) || null
+    if (bloodGroupKey && typeof bloodGroupKey === 'string')
+      // @ts-ignore
+      res.bloodGroup = BloodGroup[bloodGroupKey] || null
+    return res
+  }, [bloodGroupKey, areaId, areas])
 
   const imageContainerStyle = useAnimatedStyle(() => ({
     opacity: interpolate(offsetY.value, [0, 100], [1, 0.75], Extrapolation.CLAMP),
@@ -26,6 +49,7 @@ const DonorsScreen = () => {
 
   const headerStyle = useAnimatedStyle(() => ({
     height: interpolate(offsetY.value, [0, 100], [200, 60], Extrapolation.CLAMP),
+    top: interpolate(offsetY.value, [0, 100], [0, 0], Extrapolation.CLAMP),
   }))
 
   const headerTitleStyle = useAnimatedStyle(() => ({
@@ -58,30 +82,42 @@ const DonorsScreen = () => {
           }}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <Animated.View style={[{
-              backgroundColor: '#0d1321',
-              position: 'relative',
-            }, headerStyle]}
-            >
-              <HStack className='justify-end p-5'>
-                <Pressable
-                  onPress={() => setFilters(prev => !prev)}
-                  className='h-10 w-10 justify-center items-center rounded-full'>
-                  {showFilters ?
-                    <FilterX size={20} color="#f8fafc" />
-                    : <Filter size={20} color="#f8fafc" />}
-                </Pressable>
-              </HStack>
-              <Animated.Text
-                style={[{
-                  color: "#f8fafc",
-                  fontWeight: 700,
-                  position: 'absolute'
-                }, headerTitleStyle]}
+            <Fragment>
+              <Animated.View style={[{
+                backgroundColor: '#0d1321',
+                position: 'relative',
+                marginTop: 0
+              }, headerStyle]}
               >
-                All Donors
-              </Animated.Text>
-            </Animated.View>
+                <HStack className='justify-end gap-1'>
+                  {area && (
+                    <HStack className='gap-2 items-center py-6 px-3'>
+                      <LandPlot size={20} color="#f8fafc" />
+                      <Text className='text-gray-50'>{area.name}</Text>
+                    </HStack>
+                  )}
+                  <HStack className='px-4 py-5'>
+                    <Pressable
+                      onPress={() => setFilters(prev => !prev)}
+                      className='justify-center p-1 items-center rounded-full'>
+                      {showFilters ?
+                        <FilterX size={20} color="#f8fafc" />
+                        : <Filter size={20} color="#f8fafc" />}
+                    </Pressable>
+                  </HStack>
+                </HStack>
+                <Animated.Text
+                  style={[{
+                    color: "#f8fafc",
+                    fontWeight: 700,
+                    position: 'absolute'
+                  }, headerTitleStyle]}
+                >
+                  {bloodGroup ? `${bloodGroup === BloodGroup.OTHER ? 'Rare' : bloodGroup} Blood Donors` : "All Donors"}
+                </Animated.Text>
+              </Animated.View>
+              {showFilters && <DonorFilters />}
+            </Fragment>
           }
           // ListHeaderComponentStyle={{ position: 'absolute', top: 0, left: 0, right: 0 }}
           data={donors}
@@ -89,16 +125,7 @@ const DonorsScreen = () => {
           renderItem={({ item }) => <DonorCard key={`donor-${item.id}`} donor={item} />}
           onRefresh={() => queryClient.refetchQueries({ queryKey: ['donors'] })}
         />
-
-        <Pressable
-          onPress={() => setAdd(true)}
-          className='absolute h-14 justify-center items-center w-14 bg-primary-500 rounded-full bottom-6 right-6'
-        >
-          <UserRoundPlus color='#ffffff' size={24} />
-        </Pressable>
       </VStack>
-
-      <DonorFormWrapper open={add} onClose={() => setAdd(false)} />
     </Fragment >
   )
 }

@@ -1,9 +1,8 @@
-import { VStack } from '@/components/ui/vstack';
 import { queryClient } from '@/lib/react-query';
 import { supabase } from '@/lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Tabs, useRouter } from 'expo-router';
-import { CircleUserRound, LandPlot, UserRoundCog, UsersRound } from 'lucide-react-native';
+import { CircleUserRound, LandPlot, Syringe, UserRoundCog, UsersRound } from 'lucide-react-native';
 import { useEffect } from 'react';
 
 export default function TabLayout() {
@@ -25,20 +24,38 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#27447d',
         headerTitleStyle: {
           fontWeight: 700
-        }
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Area Committees',
-
+          headerShown: false,
           tabBarIcon: ({ color }) => <LandPlot size={20} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="blood-groups"
+        options={{
+          href: null,
+          headerShown: false,
+          title: 'Blood Groups',
+          tabBarIcon: ({ color }) => <Syringe size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="donors"
         options={{
+          href: null,
           title: 'Donors',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <UsersRound size={20} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="add-donor"
+        options={{
+          title: 'Add New Donor',
           headerShown: false,
           tabBarIcon: ({ color }) => <UsersRound size={20} color={color} />,
         }}
@@ -47,6 +64,7 @@ export default function TabLayout() {
         name="staffs"
         options={{
           title: 'Staffs',
+          headerShown: false,
           tabBarIcon: ({ color }) => <UserRoundCog size={20} color={color} />,
         }}
       />

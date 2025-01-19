@@ -7,6 +7,7 @@ import { Database } from './database.types'
 
 const supabaseUrl = SUPABASE.URL
 const supabaseAnonKey = SUPABASE.ANON_KEY
+const supabaseServiceKey = SUPABASE.SERVICE_KEY
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -16,6 +17,15 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false,
   },
 })
+
+const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+})
+
+export const authAdmin = supabaseAdmin.auth.admin
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

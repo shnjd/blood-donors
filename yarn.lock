@@ -1242,6 +1242,11 @@
     "@react-native-aria/focus" "^0.2.9"
     "@react-native-aria/interactions" "0.2.13"
 
+"@gluestack-ui/divider@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/divider/-/divider-0.1.10.tgz#506ec45f9b5183a0e3b293dbff7b7da19edcfda8"
+  integrity sha512-/hZx1Rmy4Pgln9AwAprAEQcxYPEHjHSNF4xCUWlK/q0peyiMT5Nagt54VnxykVn5A0b2zg5QKP0pOqOF9xeE6w==
+
 "@gluestack-ui/form-control@^0.1.19":
   version "0.1.19"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/form-control/-/form-control-0.1.19.tgz#7a75b65f5ec89da95c30442750d6f7af71db6868"
@@ -1326,6 +1331,11 @@
     "@gluestack-ui/hooks" "0.1.12"
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
+
+"@gluestack-ui/spinner@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/spinner/-/spinner-0.1.15.tgz#712276227568476f55672b7bbe0082478c0c0a65"
+  integrity sha512-jkXOGhna05HM2tcPKbA+t+vqcVRgRowwC6ES0A9kY5fcuURH1V41UFx/YWyHdSsHwmWlIoCCdWycF78UbNVdPg==
 
 "@gluestack-ui/toast@^1.0.8":
   version "1.0.8"
