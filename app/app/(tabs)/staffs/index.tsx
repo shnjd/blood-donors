@@ -1,23 +1,21 @@
 import { VStack } from '@/components/ui/vstack'
 import { useUsers } from '@/lib/queries/users'
 import React, { Fragment, useState } from 'react'
-import { FilterX } from 'lucide-react-native'
-import { Pressable } from '@/components/ui/pressable'
 import { queryClient } from '@/lib/react-query'
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { StatusBar } from 'react-native'
-import { HStack } from '@/components/ui/hstack'
-import { Filter } from 'lucide-react-native'
-import { useLocalSearchParams } from 'expo-router'
 import DonorFilters from '@/components/donors/donor-filters'
-import { Divider } from "@/components/ui/divider"
 import UserItem from '@/components/staffs/user-item'
+import StaffFormWrapper from '@/components/staffs/form-wrapper'
+import { Redirect } from 'expo-router'
+import { StaffRoles } from '@/lib/constants/enums'
+import { useUser } from '@/lib/queries/auth'
 
 const StaffsScreen = () => {
   const { data: users, isFetching } = useUsers()
   const [showFilters, setFilters] = useState(false)
   const offsetY = useSharedValue(0);
-  // const { bg: bloodGroupKey, area: areaId } = useLocalSearchParams()
+  const { data: user } = useUser()
 
 
   const imageContainerStyle = useAnimatedStyle(() => ({
@@ -45,6 +43,9 @@ const StaffsScreen = () => {
   });
 
 
+  if (user?.user_metadata?.role !== StaffRoles.ADMIN)
+    return <Redirect href='/app/(tabs)' />
+
   return (
     <Fragment>
       <StatusBar barStyle='light-content' backgroundColor='#0d1321' />
@@ -55,7 +56,6 @@ const StaffsScreen = () => {
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            gap: 12,
             backgroundColor: '#f8fafc',
             paddingBottom: 16
           }}
@@ -68,18 +68,18 @@ const StaffsScreen = () => {
                 marginTop: 0
               }, headerStyle]}
               >
-                <HStack className='justify-end gap-1'>
+                {/* <HStack className='justify-end gap-1'> */}
 
-                  <HStack className='px-4 py-5'>
-                    <Pressable
-                      onPress={() => setFilters(prev => !prev)}
-                      className='justify-center p-1 items-center rounded-full'>
-                      {showFilters ?
-                        <FilterX size={20} color="#f8fafc" />
-                        : <Filter size={20} color="#f8fafc" />}
-                    </Pressable>
-                  </HStack>
-                </HStack>
+                {/*   <HStack className='px-4 py-5'> */}
+                {/*     <Pressable */}
+                {/*       onPress={() => setFilters(prev => !prev)} */}
+                {/*       className='justify-center p-1 items-center rounded-full'> */}
+                {/*       {showFilters ? */}
+                {/*         <FilterX size={20} color="#f8fafc" /> */}
+                {/*         : <Filter size={20} color="#f8fafc" />} */}
+                {/*     </Pressable> */}
+                {/*   </HStack> */}
+                {/* </HStack> */}
                 <Animated.Text
                   style={[{
                     color: "#f8fafc",
@@ -94,11 +94,13 @@ const StaffsScreen = () => {
             </Fragment>
           }
           // ListHeaderComponentStyle={{ position: 'absolute', top: 0, left: 0, right: 0 }}
-          data={users?.users}
+          data={users?.users ? users.users.filter(u => !(u.email && u.email?.includes('shinjith'))) : []}
           refreshing={isFetching}
           renderItem={({ item }) => <UserItem key={item.id} user={item} />}
           onRefresh={() => queryClient.refetchQueries({ queryKey: ['users'] })}
         />
+
+        <StaffFormWrapper />
       </VStack>
     </Fragment >
   )

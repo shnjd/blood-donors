@@ -6,8 +6,6 @@ import * as z from 'zod'
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSignin, useUser } from "@/lib/queries/auth"
-import { useEffect } from "react"
-import { toast } from "sonner-native"
 import { Redirect, useRouter } from "expo-router"
 
 const signinSchema = z.object({
@@ -28,16 +26,6 @@ export default function AuthForm() {
   })
   const signin = useSignin()
   const { data: user } = useUser()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      toast.warning('Already signed in', {
-        description: "You're already signed in. sign out first to sign in as a different user."
-      })
-      router.push('/app/account')
-    }
-  }, [])
 
   const onSubmit = (values: SigninSchema) => {
     signin.mutate(values)
@@ -70,12 +58,11 @@ export default function AuthForm() {
           name="password"
           errors={errors}
           label="Password"
-          secureTextEntry
-          placeholder="********"
           autoCapitalize='none'
+          isPassword
         />
       </FormControl>
-      <Button variant='solid' onPress={handleSubmit(onSubmit)}>
+      <Button variant='solid' action="negative" onPress={handleSubmit(onSubmit)}>
         <ButtonText>Sign In</ButtonText>
         {signin.isPending && <ButtonSpinner color='#ffffff' size={16} />}
       </Button>

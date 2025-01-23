@@ -20,7 +20,6 @@ export const useSignin = () => {
       // router.push('/app/account')
     },
     onError: (error: AuthError) => {
-      console.log(error)
       if (error?.code === 'invalid_credentials') {
         toast.error('Failed to sign in', {
           description: 'Invalid email or password! try again'
@@ -39,7 +38,6 @@ export const useSignout = () => {
       // router.push('/')
     },
     onError: (error) => {
-      console.log(error)
     }
   })
 }

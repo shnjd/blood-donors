@@ -9,3 +9,9 @@ export enum BloodGroup {
   O_MINUS = "O-",
   OTHER = "other"
 }
+
+export enum StaffRoles {
+  STAFF = 'Staff',
+  STAFF_ELEVATED = 'Staff - Elevated',
+  ADMIN = 'Administrator'
+}

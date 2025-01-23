@@ -38,6 +38,7 @@ export type Database = {
           comments: string | null
           created_at: string
           donation_count: number
+          donation_hospital: string | null
           id: number
           last_donated_on: string | null
           name: string
@@ -53,6 +54,7 @@ export type Database = {
           comments?: string | null
           created_at?: string
           donation_count?: number
+          donation_hospital?: string | null
           id?: number
           last_donated_on?: string | null
           name: string
@@ -68,6 +70,7 @@ export type Database = {
           comments?: string | null
           created_at?: string
           donation_count?: number
+          donation_hospital?: string | null
           id?: number
           last_donated_on?: string | null
           name?: string

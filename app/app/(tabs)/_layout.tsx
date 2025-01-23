@@ -1,3 +1,5 @@
+import { StaffRoles } from '@/lib/constants/enums';
+import { useUser } from '@/lib/queries/auth';
 import { queryClient } from '@/lib/react-query';
 import { supabase } from '@/lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +9,7 @@ import { useEffect } from 'react';
 
 export default function TabLayout() {
   const router = useRouter()
+  const { data: user } = useUser()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event) => {
@@ -61,8 +64,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="staffs"
+        name="edit-donor"
         options={{
+          href: null,
+          title: 'Edit Donor',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <UsersRound size={20} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="staffs/index"
+        options={{
+          href: user?.user_metadata?.role !== StaffRoles.ADMIN ? null : undefined,
           title: 'Staffs',
           headerShown: false,
           tabBarIcon: ({ color }) => <UserRoundCog size={20} color={color} />,
@@ -72,6 +85,14 @@ export default function TabLayout() {
         name="account"
         options={{
           title: 'Account',
+          tabBarIcon: ({ color }) => <CircleUserRound size={20} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="staffs/[userId]"
+        options={{
+          href: null,
+          title: 'Staff Info',
           tabBarIcon: ({ color }) => <CircleUserRound size={20} color={color} />,
         }}
       />

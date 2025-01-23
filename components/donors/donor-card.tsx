@@ -5,16 +5,20 @@ import { HStack } from '../ui/hstack'
 import { CalendarArrowDown, LandPlot, MapPin } from 'lucide-react-native'
 import { Text } from '@/components/ui/text'
 import { useArea } from '@/lib/queries/area'
+import { Pressable } from 'react-native'
+import dayjs from 'dayjs'
 
 type Props = {
-  donor: Database['public']['Tables']['Donors']['Row']
+  donor: Database['public']['Tables']['Donors']['Row'],
+  select: () => void
 }
 
-const DonorCard = ({ donor }: Props) => {
+const DonorCard = ({ donor, select }: Props) => {
   const { data: area } = useArea(donor.area_committee)
 
   return (
-    <VStack
+    <Pressable
+      onPress={select}
       className='p-4 bg-primary-100 rounded-xl gap-1.5 mx-3'
     >
       <HStack className='justify-between items-center'>
@@ -36,15 +40,36 @@ const DonorCard = ({ donor }: Props) => {
       </HStack>
 
       <HStack className='justify-between items-center'>
-        <HStack className='gap-1.5 items-center'>
-          <MapPin size={14} color="#27447d" />
+        <HStack className='gap-1 items-center'>
+          <Text
+            size='sm'
+            numberOfLines={1}
+            className='text-primary-700'
+          >
+            Last donated on:
+          </Text>
           <Text
             bold
             size='sm'
             numberOfLines={1}
-            className='text-primary-700 max-w-[70%] grow'
+            className='text-primary-700'
           >
-            {donor.place}
+            {dayjs(donor?.last_donated_on).isValid() ? dayjs(donor.last_donated_on).format('DD/MM/YYYY') : 'N/A'}
+          </Text>
+          <Text
+            size='sm'
+            numberOfLines={1}
+            className='text-primary-700'
+          >
+            - count:
+          </Text>
+          <Text
+            bold
+            size='sm'
+            numberOfLines={1}
+            className='text-primary-700'
+          >
+            {donor?.donation_count ? donor.donation_count : 0}
           </Text>
         </HStack>
 
@@ -55,7 +80,7 @@ const DonorCard = ({ donor }: Props) => {
           </HStack>
         )}
       </HStack>
-    </VStack>
+    </Pressable>
   )
 }
 

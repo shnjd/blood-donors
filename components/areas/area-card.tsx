@@ -14,9 +14,9 @@ const AreaCard = ({ area }: Props) => {
   return (
     <Pressable
       onPress={() => router.push(`/app/blood-groups?area=${area.id}`)}
-      className='w-[45%] h-36 justify-center items-center rounded-2xl bg-primary-100'
+      className='w-[30%] h-36 justify-center items-center rounded-2xl bg-primary-950/60'
     >
-      <Heading size='xl' className='text-primary-900'>{area.name}</Heading>
+      <Heading size='xl' className='text-white uppercase'>{area.name}</Heading>
     </Pressable>
   )
 }

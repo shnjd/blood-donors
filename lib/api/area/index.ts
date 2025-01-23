@@ -9,7 +9,6 @@ export const getArea = async (areaId: number) => {
     if (error) return Promise.reject(error)
     return Promise.resolve(data)
   } catch (err) {
-    console.log(err)
     return Promise.reject(err)
   }
 }
@@ -22,7 +21,6 @@ export const getAreas = async () => {
     if (error) return Promise.reject(error)
     return Promise.resolve(data)
   } catch (err) {
-    console.log(err)
     return Promise.reject(err)
   }
 }

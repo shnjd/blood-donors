@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "blood-donors",
-    "slug": "blood-donors",
-    "scheme": "com.blooddonors",
+    "name": "SFI ASPC",
+    "slug": "sfi-aspc",
+    "scheme": "com.aspc.sfi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "com.aspc.sfi",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -17,7 +17,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.blooddonors.app"
+      "package": "com.aspc.sfi"
     },
     "web": {
       "bundler": "metro",

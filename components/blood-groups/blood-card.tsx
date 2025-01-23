@@ -24,7 +24,7 @@ const BloodGroupCard = ({ bg, areaId }: Props) => {
   return (
     <Pressable
       onPress={() => router.push(`/app/donors${queries}` as Href)}
-      className='w-[45%] h-32 justify-center items-center rounded-xl bg-primary-100'>
+      className='w-[29%] h-28 justify-center items-center rounded-xl bg-gray-50 opacity-85'>
       <Heading size='3xl' className='text-red-700'>{bg === BloodGroup.OTHER ? 'RARE' : bg}</Heading>
     </Pressable>
   )

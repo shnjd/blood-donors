@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { VStack } from '../ui/vstack'
 import { FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlHelper, FormControlHelperText, FormControlLabel, FormControlLabelText } from '../ui/form-control'
-import { Input, InputField } from '../ui/input'
-import { CircleAlert } from 'lucide-react-native'
+import { Input, InputField, InputIcon, InputSlot } from '../ui/input'
+import { CircleAlert, EyeIcon, EyeOffIcon } from 'lucide-react-native'
 import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form"
 
 interface Props<T extends FieldValues> {
@@ -34,6 +34,8 @@ const FormInput = <T extends FieldValues>({
   keyboardType,
   numberOfLines
 }: Props<T>) => {
+  const [showPassword, setShowPassword] = useState(false)
+
   return (
     <VStack>
       {label && (
@@ -50,10 +52,11 @@ const FormInput = <T extends FieldValues>({
         render={({ field: { onChange, value } }) => (
           <Input
             size={inputSize}
+            className='bg-white/50'
             isInvalid={!!errors?.[name]}
           >
             <InputField
-              type={isPassword ? 'password' : 'text'}
+              type={(!isPassword || showPassword) ? 'text' : 'password'}
               placeholder={placeholder}
               value={value}
               onChangeText={onChange}
@@ -63,6 +66,11 @@ const FormInput = <T extends FieldValues>({
               numberOfLines={numberOfLines}
               multiline={!!numberOfLines && numberOfLines > 1}
             />
+            {isPassword && (
+              <InputSlot className="pr-3" onPress={() => setShowPassword(prev => !prev)}>
+                <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+              </InputSlot>
+            )}
           </Input>
         )}
       />

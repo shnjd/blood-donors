@@ -1233,6 +1233,18 @@
     "@react-native-aria/focus" "^0.2.9"
     "@react-native-aria/interactions" "0.2.13"
 
+"@gluestack-ui/alert-dialog@^0.1.32":
+  version "0.1.32"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/alert-dialog/-/alert-dialog-0.1.32.tgz#d99b76a676edff2840008f03f4e3f1d2af38c330"
+  integrity sha512-+imIkN0SgEuikQKgevBw2uBUE0ypD4VygGkPGwq/t8WVLlKp/DCz3GQhsiZavkFi/fbXHNNldwOjSP4RjlYfFQ==
+  dependencies:
+    "@gluestack-ui/hooks" "0.1.12"
+    "@gluestack-ui/overlay" "^0.1.16"
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/dialog" "^0.0.4"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.13"
+
 "@gluestack-ui/button@^1.0.8":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/button/-/button-1.0.8.tgz#fb6c1a3e6c59561d0cd6e7d8d0f519034144c66d"
@@ -1246,6 +1258,15 @@
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/divider/-/divider-0.1.10.tgz#506ec45f9b5183a0e3b293dbff7b7da19edcfda8"
   integrity sha512-/hZx1Rmy4Pgln9AwAprAEQcxYPEHjHSNF4xCUWlK/q0peyiMT5Nagt54VnxykVn5A0b2zg5QKP0pOqOF9xeE6w==
+
+"@gluestack-ui/fab@^0.1.22":
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/fab/-/fab-0.1.22.tgz#46861c5d886f5304fb8cf67033012cb4cc2d3239"
+  integrity sha512-kemsTSOFu18fL0stTAJ5O1FXcrDW2FULNpq3wJJT5aBiwHhQhvWHq1Dyzn/7kT2jSHrvNHDsTzzTcDzGIgVqmg==
+  dependencies:
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.13"
 
 "@gluestack-ui/form-control@^0.1.19":
   version "0.1.19"
@@ -1269,6 +1290,15 @@
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
 
+"@gluestack-ui/image@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/image/-/image-0.1.11.tgz#f7e624a4cdfc227a068e28331db457f31e7e1c94"
+  integrity sha512-Zg9+vdNr6jwM71RBxROzTSyNfLFOncBVSZfJX7nJ4N/8cRsSwbYCDJqt+UYe/+I1KYIpHCAICdgsJdas/lthkw==
+  dependencies:
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.13"
+
 "@gluestack-ui/input@^0.1.32":
   version "0.1.32"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/input/-/input-0.1.32.tgz#d4d64e43938b2cf9ee3f816fa774d08333305d28"
@@ -1278,6 +1308,19 @@
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
     "@react-native-aria/interactions" "0.2.13"
+
+"@gluestack-ui/modal@^0.1.35":
+  version "0.1.35"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/modal/-/modal-0.1.35.tgz#5ed5df4b999926bc13456d94a2ae4fc647b98e16"
+  integrity sha512-KfA2aJ/ZsdM5rggAAJOykVHsOZf7aYjTfDNsd5JHUC7Uo8IrQAZJBX1DEz+Y3V8dPMXEIlEFGMaVh4o29nZXcw==
+  dependencies:
+    "@gluestack-ui/hooks" "0.1.12"
+    "@gluestack-ui/overlay" "^0.1.16"
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/dialog" "^0.0.4"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.13"
+    "@react-native-aria/overlays" "^0.3.12"
 
 "@gluestack-ui/nativewind-utils@^1.0.26":
   version "1.0.26"
@@ -4153,6 +4196,11 @@ expo-haptics@~14.0.1:
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-14.0.1.tgz#ff4ead605e33f1917e615c9328af7ac1c34892dc"
   integrity sha512-V81FZ7xRUfqM6uSI6FA1KnZ+QpEKnISqafob/xEfcx1ymwhm4V3snuLWWFjmAz+XaZQTqlYa8z3QbqEXz7G63w==
+
+expo-image@~2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-2.0.4.tgz#52db27a489b2fc652b1dd612748366781913d93b"
+  integrity sha512-oIVSlV/BpBJbI9Anf8RjraGJXDWSJxNKxdXkYBJ31XrQaUstOM7OmsVKjOK40ZFZHIz3rx5SBJWK5w52Uz+/bg==
 
 expo-keep-awake@~14.0.2:
   version "14.0.2"

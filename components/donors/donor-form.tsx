@@ -1,6 +1,6 @@
 import { PHONE_REGEX } from '@/lib/constants'
 import { BloodGroup } from '@/lib/constants/enums'
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as z from 'zod'
 import dayjs, { Dayjs } from 'dayjs'
 import { useForm } from 'react-hook-form'
@@ -10,13 +10,13 @@ import { FormControl } from '../ui/form-control'
 import FormInput from '@/components/form-ui/input'
 import { Button, ButtonSpinner, ButtonText } from '../ui/button'
 import FormSelect from '../form-ui/select'
-import { useAreas } from '@/lib/queries/area'
 import { Database } from '@/lib/database.types'
+import FormDatePicker from '../form-ui/date-picker'
 
 const donorSchema = z.object({
   name: z.string({ message: 'Name is required' }),
   place: z.string({ message: 'Place is required' }),
-  blood_group: z.nativeEnum(BloodGroup),
+  blood_group: z.nativeEnum(BloodGroup, { message: "Blood Group is required" }),
   donation_count: z.coerce.number({ message: 'Enter a valid number' }),
   phone: z.string({ message: 'Phone number is required' }).regex(PHONE_REGEX, { message: 'Invalid Phone Number format' }),
   phone_alt: z.string().regex(PHONE_REGEX, { message: 'Invalid Phone umber format' }).optional(),
@@ -24,26 +24,46 @@ const donorSchema = z.object({
   last_donated_on: z.instanceof(dayjs as unknown as typeof Dayjs, { message: "Invalid date" }).optional().nullable(),
   address: z.string().optional(),
   comments: z.string().optional(),
-  other_blood_group: z.string().optional()
+  other_blood_group: z.string().optional(),
+  donation_hospital: z.string().optional()
 })
 
 export type DonorSchema = z.infer<typeof donorSchema>
 
 type Props = {
   areas: Database['public']['Tables']['AreaCommittee']['Row'][] | undefined,
+  donor?: Database['public']['Tables']['Donors']['Row'] | null,
   isLoading: boolean,
   onSubmit: (values: DonorSchema) => void
 }
 
-const DonorForm = ({ areas, isLoading, onSubmit }: Props) => {
+const DonorForm = ({ areas, isLoading, donor, onSubmit }: Props) => {
   const {
     control,
     watch,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitted, isValid }
   } = useForm<DonorSchema>({
     resolver: zodResolver(donorSchema),
   })
+
+  useEffect(() => {
+    if (donor) {
+      reset({
+        ...donor,
+        blood_group: donor.blood_group as BloodGroup,
+        phone_alt: donor?.phone_alt || undefined,
+        area_committee: donor?.area_committee || undefined,
+        address: donor?.address || undefined,
+        comments: donor?.comments || undefined,
+        other_blood_group: donor?.other_blood_group || undefined,
+        last_donated_on: dayjs(donor?.last_donated_on).isValid() ? dayjs(donor.last_donated_on) : undefined,
+        donation_hospital: donor?.donation_hospital || undefined
+      })
+    }
+  }, [donor])
+
   return (
     <VStack className="p-3 gap-3 w-full">
       <FormControl
@@ -91,6 +111,31 @@ const DonorForm = ({ areas, isLoading, onSubmit }: Props) => {
           helperText='The number of times the donor previously donated'
           keyboardType='numeric'
         />
+        <FormDatePicker
+          control={control}
+          name="last_donated_on"
+          errors={errors}
+          label="Last Donated Date (Optional)"
+          placeholder="Select a date"
+        />
+        <FormSelect
+          control={control}
+          name="donation_hospital"
+          errors={errors}
+          label="Hospital of Donation"
+          placeholder="Select a hospital"
+          options={['GENERAL HOSPITAL, KASARAGOD', 'DISTRICT HOSPITAL, KANHANGAD', 'OTHER'].map(h => ({ label: h, value: h === 'OTHER' ? '' : h }))}
+        />
+        {watch('donation_hospital') === '' && (
+          <FormInput
+            control={control}
+            name="donation_hospital"
+            errors={errors}
+            label="Hospital Name"
+            placeholder="Name of the other hospital"
+            autoCapitalize='words'
+          />
+        )}
         <FormInput
           control={control}
           name="phone"
@@ -135,7 +180,10 @@ const DonorForm = ({ areas, isLoading, onSubmit }: Props) => {
         />
       </FormControl>
 
-      <Button variant='solid' onPress={handleSubmit(onSubmit)}>
+      <Button variant='solid' onPress={handleSubmit((values) => {
+        onSubmit(values)
+        reset()
+      })}>
         <ButtonText>Save</ButtonText>
         {isLoading && <ButtonSpinner color='#ffffff' size={16} />}
       </Button>

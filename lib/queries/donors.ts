@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addDonor, getDonors } from "../api/donors";
+import { addDonor, getDonors, removeDonor, updateDonor } from "../api/donors";
 import { toast } from "sonner-native";
 import { queryClient } from "../react-query";
 import { BloodGroup } from "../constants/enums";
@@ -19,11 +19,34 @@ export const useAddDonor = () =>
   useMutation({
     mutationFn: addDonor,
     onSuccess: () => {
-      toast.success('Added Donor')
+      toast.success('Added donor')
       queryClient.invalidateQueries({ queryKey: ['donors'] })
     },
     onError: (error) => {
-      console.log(error)
       toast.error('Failed add donor! try again later')
+    }
+  })
+
+export const useUpdateDonor = () =>
+  useMutation({
+    mutationFn: updateDonor,
+    onSuccess: () => {
+      toast.success('Saved changes to donor')
+      queryClient.invalidateQueries({ queryKey: ['donors'] })
+    },
+    onError: (error) => {
+      toast.error('Failed update donor! try again later')
+    }
+  })
+
+export const useRemoveDonor = () =>
+  useMutation({
+    mutationFn: removeDonor,
+    onSuccess: () => {
+      toast.success('Deleted donor')
+      queryClient.invalidateQueries({ queryKey: ['donors'] })
+    },
+    onError: (error) => {
+      toast.error('Failed delete donor! try again later')
     }
   })

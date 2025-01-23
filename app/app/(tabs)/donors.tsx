@@ -1,6 +1,6 @@
 import { VStack } from '@/components/ui/vstack'
 import { useDonors } from '@/lib/queries/donors'
-import React, { Fragment, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import DonorCard from '@/components/donors/donor-card'
 import { FilterX, LandPlot } from 'lucide-react-native'
 import { Pressable } from '@/components/ui/pressable'
@@ -15,32 +15,33 @@ import { BloodGroup } from '@/lib/constants/enums'
 import { Database } from '@/lib/database.types'
 import { Text } from '@/components/ui/text'
 import DonorFilters from '@/components/donors/donor-filters'
+import DonorModal from '@/components/donors/donor-modal'
+import RemoveDonor from '@/components/donors/remove-donor'
+import DonorBloodFormWrapper from '@/components/donors/blood-wrapper'
 
 const DonorsScreen = () => {
-  const [showFilters, setFilters] = useState(true)
+  const [showFilters, setFilters] = useState(false)
   const offsetY = useSharedValue(0);
   const { bg: bloodGroupKey, area: areaId } = useLocalSearchParams()
   const { data: areas } = useAreas()
   const { data: donors, isFetching } = useDonors({ bloodGroup: bloodGroupKey, areaId })
+  const [modalDonor, setDonor] = useState<Database['public']['Tables']['Donors']['Row'] | null>(null)
+  const [removeId, setRemoveId] = useState<number | null>(null)
+  const [modifyId, setModifyId] = useState<number | null>(null)
 
-  const {
-    bloodGroup,
-    area
-  } = useMemo(() => {
-    const res: {
-      bloodGroup: string | null,
-      area: Database['public']['Tables']['AreaCommittee']['Row'] | null
-    } = {
-      bloodGroup: null,
-      area: null
-    }
+  const area = useMemo(() => {
     if (areaId && !isNaN(Number(areaId)) && areas)
-      res.area = areas.find(a => a.id === Number(areaId)) || null
+      return areas.find(a => a.id === Number(areaId)) || null
+
+    return null
+  }, [areaId, areas])
+
+  const bloodGroup = useMemo(() => {
     if (bloodGroupKey && typeof bloodGroupKey === 'string')
       // @ts-ignore
-      res.bloodGroup = BloodGroup[bloodGroupKey] || null
-    return res
-  }, [bloodGroupKey, areaId, areas])
+      return BloodGroup[bloodGroupKey] || null
+    return null
+  }, [bloodGroupKey])
 
   const imageContainerStyle = useAnimatedStyle(() => ({
     opacity: interpolate(offsetY.value, [0, 100], [1, 0.75], Extrapolation.CLAMP),
@@ -122,11 +123,45 @@ const DonorsScreen = () => {
           // ListHeaderComponentStyle={{ position: 'absolute', top: 0, left: 0, right: 0 }}
           data={donors}
           refreshing={isFetching}
-          renderItem={({ item }) => <DonorCard key={`donor-${item.id}`} donor={item} />}
+          renderItem={({ item }) => <DonorCard select={() => setDonor(item)} key={`donor-${item.id}`} donor={item} />}
           onRefresh={() => queryClient.refetchQueries({ queryKey: ['donors'] })}
+          ListEmptyComponent={
+            <VStack>
+              <Text className='text-center'>{bloodGroupKey || areaId ? "No donors found; try changing the filters." : "No donors found."}</Text>
+            </VStack>
+          }
         />
       </VStack>
-    </Fragment >
+
+      {modalDonor &&
+        <DonorModal
+          donor={modalDonor}
+          close={() => setDonor(null)}
+          remove={() => setRemoveId(modalDonor.id)}
+          modify={() => setModifyId(modalDonor.id)}
+        />
+      }
+
+      {modifyId &&
+        <DonorBloodFormWrapper
+          donorId={modifyId}
+          close={() => {
+            setModifyId(null)
+            setDonor(null)
+          }}
+        />
+      }
+      {removeId && (
+        <RemoveDonor
+          donorId={removeId}
+          close={() => {
+            setRemoveId(null)
+            setDonor(null)
+          }}
+        />
+      )}
+
+    </Fragment>
   )
 }
 
